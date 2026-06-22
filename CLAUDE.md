@@ -87,8 +87,9 @@ Prediction
   - points (integer, nullable) — set by the scorer when a result is entered;
                                  RECALCULATED if the result is later edited
   - submitted_at (datetime)
-  - locked (boolean) — true once the fixture's kickoff_at has passed
   - unique on (user, fixture)
+  - locked? is a COMPUTED METHOD (fixture.kickoff_at <= Time.current), not a stored column.
+    No background job needed to flip it.
 ```
 
 ### Two admin tiers
