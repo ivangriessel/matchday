@@ -226,6 +226,18 @@ Implementation notes:
 
 ---
 
+## Commit rules
+
+A commit must represent a working, tested state:
+
+1. The task is complete (no half-finished work)
+2. `bundle exec rspec` passes — all tests green
+3. Amend or squash into the relevant commit while changes are still local; don't leave the passwordless-migration-style loose ends once pushed
+
+Never commit to unblock yourself. If tests are failing, fix them first.
+
+---
+
 ## What to avoid
 
 - Devise — use `passwordless` gem instead
