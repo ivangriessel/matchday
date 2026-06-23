@@ -22,7 +22,7 @@
   [ "Newcastle United",        "NEW" ],
   [ "Nottingham Forest",       "NFO" ],
   [ "Sunderland",              "SUN" ],
-  [ "Tottenham Hotspur",       "TOT" ],
+  [ "Tottenham Hotspur",       "TOT" ]
 ].each do |name, short_code|
   Team.find_or_create_by!(short_code: short_code) do |t|
     t.name = name
