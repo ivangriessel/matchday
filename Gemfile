@@ -24,7 +24,7 @@ gem "passwordless", "~> 1.7"
 gem "view_component"
 
 # Transactional email via Resend
-gem "resend", "~> 0.15"
+gem "resend", "~> 1.5"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
