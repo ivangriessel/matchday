@@ -1,0 +1,41 @@
+<h1>Fixtures</h1>
+<%= link_to "Add fixture", new_admin_fixture_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Season</th>
+      <th>MW</th>
+      <th>Home</th>
+      <th>Away</th>
+      <th>Kickoff</th>
+      <th>Score</th>
+      <th>Status</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @fixtures.each do |fixture| %>
+      <tr>
+        <td><%= fixture.season %></td>
+        <td><%= fixture.matchweek %></td>
+        <td><%= fixture.home_team.name %></td>
+        <td><%= fixture.away_team.name %></td>
+        <td><%= fixture.kickoff_at.strftime("%d %b %Y %H:%M") %></td>
+        <td>
+          <% if fixture.home_score %>
+            <%= fixture.home_score %>–<%= fixture.away_score %>
+          <% else %>
+            —
+          <% end %>
+        </td>
+        <td><%= fixture.status %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_fixture_path(fixture) %>
+          <%= button_to "Delete", admin_fixture_path(fixture), method: :delete,
+                data: { turbo_confirm: "Delete this fixture?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
