@@ -1,0 +1,24 @@
+<% if @matchweek %>
+  <h1>Matchweek <%= @matchweek %></h1>
+
+  <ul>
+    <% @fixtures.each do |fixture| %>
+      <li>
+        <span><%= fixture.kickoff_at.strftime("%a %-d %b, %H:%M") %></span>
+        <span>
+          <%= fixture.home_team.name %>
+          <% if fixture.home_score %>
+            <%= fixture.home_score %>–<%= fixture.away_score %>
+          <% else %>
+            vs
+          <% end %>
+          <%= fixture.away_team.name %>
+        </span>
+        <span><%= fixture.status %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <h1>Matchday</h1>
+  <p>No upcoming fixtures.</p>
+<% end %>

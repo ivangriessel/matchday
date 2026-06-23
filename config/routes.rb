@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :fixtures
   end
 
-  root to: "home#index"
+  root to: "fixtures#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
 end
