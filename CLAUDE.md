@@ -196,34 +196,34 @@ Implementation notes:
 
 ### Phase 1 — Core loop (build this first)
 
-1. Models + migrations: User, Group, Membership, Team, Fixture, Prediction (multi-group schema from the start)
-2. Magic link auth (passwordless); group admin adds participants by email to create memberships (no self-serve sign-up)
-3. Admin (app-admin) UI: create/edit Teams and Fixtures by hand, set matchweek + kickoff. **During Phase 1 testing, Ivan (app admin) enters fixture data — NOT Simon.** Simon's spreadsheet doesn't capture kickoff times today, but the app requires them for per-match locking, so this data is intrinsic. Simon only tests result entry + the submitted/not-submitted view. Hand-entry is temporary: Phase 2 sync auto-populates fixtures, after which this UI is only an editing/fallback tool (postponements, sync failures).
-4. Fixture index — list the upcoming matchweek's fixtures for the user's group
-5. Prediction form — submit home/away score per fixture
-6. Prediction lock — each prediction locks at its own fixture's kickoff
-7. Result entry — app admin enters actual scores; PredictionScorer stores points
-8. Leaderboard — cumulative + per-matchweek, ranked, scoped to the group
-9. Tests alongside each step (RSpec; system test for the predict → lock → score → leaderboard loop)
+- [x] 1. Models + migrations: User, Group, Membership, Team, Fixture, Prediction (multi-group schema from the start)
+- [x] 2. Magic link auth (passwordless); group admin adds participants by email to create memberships (no self-serve sign-up)
+- [x] 3. Admin (app-admin) UI: create/edit Teams and Fixtures by hand, set matchweek + kickoff. **During Phase 1 testing, Ivan (app admin) enters fixture data — NOT Simon.** Simon's spreadsheet doesn't capture kickoff times today, but the app requires them for per-match locking, so this data is intrinsic. Simon only tests result entry + the submitted/not-submitted view. Hand-entry is temporary: Phase 2 sync auto-populates fixtures, after which this UI is only an editing/fallback tool (postponements, sync failures).
+- [ ] 4. Fixture index — list the upcoming matchweek's fixtures for the user's group
+- [ ] 5. Prediction form — submit home/away score per fixture
+- [ ] 6. Prediction lock — each prediction locks at its own fixture's kickoff
+- [ ] 7. Result entry — app admin enters actual scores; PredictionScorer stores points
+- [ ] 8. Leaderboard — cumulative + per-matchweek, ranked, scoped to the group
+- [ ] 9. Tests alongside each step (RSpec; system test for the predict → lock → score → leaderboard loop)
 
 ### Phase 1b — Deploy for real-world testing
 
-10. Deploy to **Render** free tier (Rails web service + managed PostgreSQL), Solid Queue in Puma
-11. Custom domain — now effectively required (Resend needs a verified sending domain to email participants)
-12. Smoke test the full loop with 2–3 real participants before wider rollout
-13. Note Render free-tier realities for users: ~30–60s cold start after idle; Postgres expires after 90 days (plan a backup/recreate)
+- [ ] 10. Deploy to **Render** free tier (Rails web service + managed PostgreSQL), Solid Queue in Puma
+- [ ] 11. Custom domain — now effectively required (Resend needs a verified sending domain to email participants)
+- [ ] 12. Smoke test the full loop with 2–3 real participants before wider rollout
+- [ ] 13. Note Render free-tier realities for users: ~30–60s cold start after idle; Postgres expires after 90 days (plan a backup/recreate)
 
 ### Phase 2 — Automate the pain
 
-14. Fixture/result sync via **football-data.org** behind a provider adapter + FixtureSyncService
-15. Scheduled sync jobs — with a keep-warm/trigger strategy that survives Render's idle sleep (e.g. external cron pinger or Render Cron Job)
-16. Reminder emails (automated before each matchweek deadline + manual trigger), only to users who haven't submitted
+- [ ] 14. Fixture/result sync via **football-data.org** behind a provider adapter + FixtureSyncService
+- [ ] 15. Scheduled sync jobs — with a keep-warm/trigger strategy that survives Render's idle sleep (e.g. external cron pinger or Render Cron Job)
+- [ ] 16. Reminder emails (automated before each matchweek deadline + manual trigger), only to users who haven't submitted
 
 ### Phase 3 — Polish
 
-17. Admin dashboard refinement
-18. Email design
-19. Mobile UX pass
+- [ ] 17. Admin dashboard refinement
+- [ ] 18. Email design
+- [ ] 19. Mobile UX pass
 
 ---
 
