@@ -1,23 +1,33 @@
 <% if @matchweek %>
   <h1>Matchweek <%= @matchweek %></h1>
 
-  <ul>
-    <% @fixtures.each do |fixture| %>
-      <li>
-        <span><%= fixture.kickoff_at.strftime("%a %-d %b, %H:%M") %></span>
-        <span>
-          <%= fixture.home_team.name %>
-          <% if fixture.home_score %>
-            <%= fixture.home_score %>–<%= fixture.away_score %>
+  <%= form_with url: predictions_path do %>
+    <ul>
+      <% @fixtures.each do |fixture| %>
+        <% prediction = @predictions[fixture.id] %>
+        <% locked = fixture.locked? %>
+        <li>
+          <span><%= fixture.kickoff_at.strftime("%a %-d %b, %H:%M") %></span>
+          <span><%= fixture.home_team.name %></span>
+          <% if locked %>
+            <span><%= prediction ? "#{prediction.home_score}–#{prediction.away_score}" : "–" %></span>
           <% else %>
-            vs
+            <%= number_field_tag "predictions[#{fixture.id}][home_score]", prediction&.home_score, min: 0, max: 20 %>
+            <span>–</span>
+            <%= number_field_tag "predictions[#{fixture.id}][away_score]", prediction&.away_score, min: 0, max: 20 %>
           <% end %>
-          <%= fixture.away_team.name %>
-        </span>
-        <span><%= fixture.status %></span>
-      </li>
+          <span><%= fixture.away_team.name %></span>
+          <% if fixture.home_score %>
+            <span><%= fixture.home_score %>–<%= fixture.away_score %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <% if @fixtures.any? { |f| !f.locked? } %>
+      <%= submit_tag "Save predictions" %>
     <% end %>
-  </ul>
+  <% end %>
 <% else %>
   <h1>Matchday</h1>
   <p>No upcoming fixtures.</p>

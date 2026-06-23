@@ -35,6 +35,9 @@
       </header>
     <% end %>
     <main>
+      <% flash.each do |type, message| %>
+        <p><%= message %></p>
+      <% end %>
       <%= yield %>
     </main>
   </body>

@@ -10,7 +10,7 @@ class Prediction < ApplicationRecord
   before_save :set_submitted_at
 
   def locked?
-    fixture.present? && fixture.kickoff_at <= Time.current
+    fixture.present? && fixture.locked?
   end
 
   private

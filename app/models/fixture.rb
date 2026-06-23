@@ -14,6 +14,10 @@ class Fixture < ApplicationRecord
   scope :for_matchweek, ->(mw) { where(matchweek: mw).order(:kickoff_at) }
   scope :upcoming, -> { scheduled.order(:kickoff_at) }
 
+  def locked?
+    kickoff_at <= Time.current
+  end
+
   private
 
   def teams_must_differ

@@ -6,5 +6,6 @@ class FixturesController < ApplicationController
                         .order(:kickoff_at)
                         .pick(:matchweek)
     @fixtures = @matchweek ? Fixture.for_matchweek(@matchweek).includes(:home_team, :away_team) : []
+    @predictions = current_user.predictions.where(fixture: @fixtures).index_by(&:fixture_id)
   end
 end

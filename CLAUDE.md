@@ -200,8 +200,8 @@ Implementation notes:
 - [x] 2. Magic link auth (passwordless); group admin adds participants by email to create memberships (no self-serve sign-up)
 - [x] 3. Admin (app-admin) UI: create/edit Teams and Fixtures by hand, set matchweek + kickoff. **During Phase 1 testing, Ivan (app admin) enters fixture data — NOT Simon.** Simon's spreadsheet doesn't capture kickoff times today, but the app requires them for per-match locking, so this data is intrinsic. Simon only tests result entry + the submitted/not-submitted view. Hand-entry is temporary: Phase 2 sync auto-populates fixtures, after which this UI is only an editing/fallback tool (postponements, sync failures).
 - [x] 4. Fixture index — list the upcoming matchweek's fixtures for the user's group
-- [ ] 5. Prediction form — submit home/away score per fixture
-- [ ] 6. Prediction lock — each prediction locks at its own fixture's kickoff
+- [x] 5. Prediction form — submit home/away score per fixture
+- [x] 6. Prediction lock — each prediction locks at its own fixture's kickoff
 - [ ] 7. Result entry — app admin enters actual scores; PredictionScorer stores points
 - [ ] 8. Leaderboard — cumulative + per-matchweek, ranked, scoped to the group
 - [ ] 9. Tests alongside each step (RSpec; system test for the predict → lock → score → leaderboard loop)

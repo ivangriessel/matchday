@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :fixtures
   end
 
+  resources :predictions, only: [:create]
   root to: "fixtures#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
