@@ -70,7 +70,7 @@ Team
 
 Fixture
   - season (string, e.g. "2025-26")
-  - gameweek (integer) — a LABEL, not a count. Never assume 10 fixtures per gameweek.
+  - matchweek (integer) — a LABEL, not a count. Never assume 10 fixtures per matchweek.
                          Stays fixed even if the match is rescheduled to another date.
   - home_team (Team)
   - away_team (Team)
@@ -100,8 +100,8 @@ Prediction
 ### Leaderboards
 
 - **Cumulative (season):** sum of `Prediction.points` across a group's members for the season.
-- **Per-gameweek:** the same, filtered by `fixture.gameweek`.
-- Future prizes (top scorer per gameweek, best single-gameweek score over the season) are all computable from stored `points` — no extra schema needed now.
+- **Per-matchweek:** the same, filtered by `fixture.matchweek`.
+- Future prizes (top scorer per matchweek, best single-matchweek score over the season) are all computable from stored `points` — no extra schema needed now.
 
 ---
 
@@ -110,16 +110,16 @@ Prediction
 - **2 points** — correct match outcome (win/draw/loss)
 - **5 points** — exact correct score (includes the outcome points, not additive — max 5 per match)
 - Scoring is computed by a `PredictionScorer` and stored on `Prediction.points`. When a result is entered OR edited, re-score all predictions for that fixture (enqueue a job).
-- A match's points always count toward the **gameweek it was originally assigned to**, even if it's postponed and played weeks later.
+- A match's points always count toward the **matchweek it was originally assigned to**, even if it's postponed and played weeks later.
 
 ## Premier League structural realities (don't design against a clean 38×10)
 
 The real-world schedule is messy, and the data model must tolerate it:
 
-- The season is **33 weekends + 5 midweek rounds**, not 38 tidy gameweeks. A "gameweek" can have **fewer or more than 10 fixtures**.
-- **Blank gameweeks** (a team has no match that week) and **double gameweeks** (a team plays twice in one week) happen because of FA Cup / EFL Cup / European clashes.
+- The season is **33 weekends + 5 midweek rounds**, not 38 tidy matchweeks. A "matchweek" can have **fewer or more than 10 fixtures**.
+- **Blank matchweeks** (a team has no match that week) and **double matchweeks** (a team plays twice in one week) happen because of FA Cup / EFL Cup / European clashes.
 - Fixtures are **frequently rescheduled** for TV and cup clashes; matches get **postponed** and replayed later.
-- This is exactly why predictions **lock per-match at each fixture's own `kickoff_at`** — not on a single shared gameweek deadline. A postponed match simply stays open until its rescheduled kickoff. Do not introduce a per-gameweek lock.
+- This is exactly why predictions **lock per-match at each fixture's own `kickoff_at`** — not on a single shared matchweek deadline. A postponed match simply stays open until its rescheduled kickoff. Do not introduce a per-matchweek lock.
 
 ---
 
@@ -151,7 +151,7 @@ Simon is non-technical. He needs a simple, clearly labelled admin UI built into 
 
 - View/edit fixtures
 - Trigger manual fixture + result sync
-- View who has/hasn't submitted predictions for a gameweek
+- View who has/hasn't submitted predictions for a matchweek
 - Send reminder emails manually (button) and automatically (scheduled job)
 
 ---
@@ -176,9 +176,9 @@ Implementation notes:
 
 ## Reminders
 
-- Automated reminder email before each gameweek deadline (configurable lead time)
+- Automated reminder email before each matchweek deadline (configurable lead time)
 - Admin can also trigger a manual reminder from the admin UI
-- Only send to users who haven't yet submitted predictions for that gameweek
+- Only send to users who haven't yet submitted predictions for that matchweek
 
 ---
 
@@ -198,12 +198,12 @@ Implementation notes:
 
 1. Models + migrations: User, Group, Membership, Team, Fixture, Prediction (multi-group schema from the start)
 2. Magic link auth (passwordless); group admin adds participants by email to create memberships (no self-serve sign-up)
-3. Admin (app-admin) UI: create/edit Teams and Fixtures by hand, set gameweek + kickoff. **During Phase 1 testing, Ivan (app admin) enters fixture data — NOT Simon.** Simon's spreadsheet doesn't capture kickoff times today, but the app requires them for per-match locking, so this data is intrinsic. Simon only tests result entry + the submitted/not-submitted view. Hand-entry is temporary: Phase 2 sync auto-populates fixtures, after which this UI is only an editing/fallback tool (postponements, sync failures).
-4. Fixture index — list the upcoming gameweek's fixtures for the user's group
+3. Admin (app-admin) UI: create/edit Teams and Fixtures by hand, set matchweek + kickoff. **During Phase 1 testing, Ivan (app admin) enters fixture data — NOT Simon.** Simon's spreadsheet doesn't capture kickoff times today, but the app requires them for per-match locking, so this data is intrinsic. Simon only tests result entry + the submitted/not-submitted view. Hand-entry is temporary: Phase 2 sync auto-populates fixtures, after which this UI is only an editing/fallback tool (postponements, sync failures).
+4. Fixture index — list the upcoming matchweek's fixtures for the user's group
 5. Prediction form — submit home/away score per fixture
 6. Prediction lock — each prediction locks at its own fixture's kickoff
 7. Result entry — app admin enters actual scores; PredictionScorer stores points
-8. Leaderboard — cumulative + per-gameweek, ranked, scoped to the group
+8. Leaderboard — cumulative + per-matchweek, ranked, scoped to the group
 9. Tests alongside each step (RSpec; system test for the predict → lock → score → leaderboard loop)
 
 ### Phase 1b — Deploy for real-world testing
@@ -217,7 +217,7 @@ Implementation notes:
 
 14. Fixture/result sync via **football-data.org** behind a provider adapter + FixtureSyncService
 15. Scheduled sync jobs — with a keep-warm/trigger strategy that survives Render's idle sleep (e.g. external cron pinger or Render Cron Job)
-16. Reminder emails (automated before each gameweek deadline + manual trigger), only to users who haven't submitted
+16. Reminder emails (automated before each matchweek deadline + manual trigger), only to users who haven't submitted
 
 ### Phase 3 — Polish
 

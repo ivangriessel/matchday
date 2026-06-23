@@ -3,7 +3,7 @@ FactoryBot.define do
     association :home_team, factory: :team
     association :away_team, factory: :team
     season { "2025-26" }
-    gameweek { 1 }
+    matchweek { 1 }
     kickoff_at { 1.week.from_now }
     home_score { nil }
     away_score { nil }

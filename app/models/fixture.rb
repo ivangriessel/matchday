@@ -6,12 +6,12 @@ class Fixture < ApplicationRecord
   enum :status, { scheduled: "scheduled", live: "live", finished: "finished", postponed: "postponed" }
 
   validates :season, presence: true
-  validates :gameweek, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :matchweek, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :kickoff_at, presence: true
   validates :status, presence: true
   validate :teams_must_differ
 
-  scope :for_gameweek, ->(gw) { where(gameweek: gw).order(:kickoff_at) }
+  scope :for_matchweek, ->(mw) { where(matchweek: mw).order(:kickoff_at) }
   scope :upcoming, -> { scheduled.order(:kickoff_at) }
 
   private

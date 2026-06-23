@@ -1,0 +1,25 @@
+<h1>Teams</h1>
+<%= link_to "Add team", new_admin_team_path %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Short code</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @teams.each do |team| %>
+      <tr>
+        <td><%= team.name %></td>
+        <td><%= team.short_code %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_team_path(team) %>
+          <%= button_to "Delete", admin_team_path(team), method: :delete,
+                data: { turbo_confirm: "Delete #{team.name}?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
