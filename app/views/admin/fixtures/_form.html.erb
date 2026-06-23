@@ -1,0 +1,53 @@
+<%= form_with model: [:admin, fixture] do |f| %>
+  <% if fixture.errors.any? %>
+    <ul>
+      <% fixture.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div>
+    <%= f.label :season %>
+    <%= f.text_field :season, placeholder: "2025-26" %>
+  </div>
+
+  <div>
+    <%= f.label :matchweek %>
+    <%= f.number_field :matchweek, min: 1, max: 38 %>
+  </div>
+
+  <div>
+    <%= f.label :home_team_id, "Home team" %>
+    <%= f.select :home_team_id, @teams.map { |t| [t.name, t.id] }, include_blank: "Select team" %>
+  </div>
+
+  <div>
+    <%= f.label :away_team_id, "Away team" %>
+    <%= f.select :away_team_id, @teams.map { |t| [t.name, t.id] }, include_blank: "Select team" %>
+  </div>
+
+  <div>
+    <%= f.label :kickoff_at, "Kickoff (local time)" %>
+    <%= f.datetime_local_field :kickoff_at %>
+  </div>
+
+  <div>
+    <%= f.label :status %>
+    <%= f.select :status, Fixture.statuses.keys.map { |s| [s.humanize, s] } %>
+  </div>
+
+  <fieldset>
+    <legend>Result (leave blank until played)</legend>
+    <div>
+      <%= f.label :home_score, "Home score" %>
+      <%= f.number_field :home_score, min: 0 %>
+    </div>
+    <div>
+      <%= f.label :away_score, "Away score" %>
+      <%= f.number_field :away_score, min: 0 %>
+    </div>
+  </fieldset>
+
+  <%= f.submit %>
+<% end %>
