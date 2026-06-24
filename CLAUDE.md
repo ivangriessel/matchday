@@ -202,7 +202,7 @@ Implementation notes:
 - [x] 4. Fixture index — list the upcoming matchweek's fixtures for the user's group
 - [x] 5. Prediction form — submit home/away score per fixture
 - [x] 6. Prediction lock — each prediction locks at its own fixture's kickoff
-- [ ] 7. Result entry — app admin enters actual scores; PredictionScorer stores points
+- [x] 7. Result entry — app admin enters actual scores; PredictionScorer stores points; actual scores and predicted scores are displayed to the user
 - [ ] 8. Leaderboard — cumulative + per-matchweek, ranked, scoped to the group
 - [ ] 9. Tests alongside each step (RSpec; system test for the predict → lock → score → leaderboard loop)
 

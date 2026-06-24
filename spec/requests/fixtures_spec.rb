@@ -45,6 +45,25 @@ RSpec.describe "Fixtures", type: :request do
         get root_path
         expect(response.body).to include("No upcoming fixtures")
       end
+
+      it "shows the user's points for a scored fixture" do
+        fixture = create(:fixture, :kicked_off, matchweek: 1, kickoff_at: 1.hour.ago)
+        prediction = build(:prediction, user: user, fixture: fixture, home_score: 1, away_score: 0, points: 5)
+        prediction.save!(validate: false)
+        create(:fixture, matchweek: 1, kickoff_at: 1.day.from_now)
+        get root_path
+        expect(response.body).to include("5 pts")
+      end
+
+      it "shows the matchweek points total when any fixture is scored" do
+        fixture = create(:fixture, :kicked_off, matchweek: 1, kickoff_at: 1.hour.ago)
+        prediction = build(:prediction, user: user, fixture: fixture, home_score: 1, away_score: 0, points: 2)
+        prediction.save!(validate: false)
+        create(:fixture, matchweek: 1, kickoff_at: 1.day.from_now)
+        get root_path
+        expect(response.body).to include("Matchweek total")
+        expect(response.body).to include("2 pts")
+      end
     end
   end
 end

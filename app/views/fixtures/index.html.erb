@@ -20,9 +20,16 @@
           <% if fixture.home_score %>
             <span><%= fixture.home_score %>–<%= fixture.away_score %></span>
           <% end %>
+          <% if locked && prediction&.points %>
+            <span><%= prediction.points %> pts</span>
+          <% end %>
         </li>
       <% end %>
     </ul>
+
+    <% if @predictions.values.any? { |p| p.points } %>
+      <p>Matchweek total: <strong><%= @matchweek_points %> pts</strong></p>
+    <% end %>
 
     <% if @fixtures.any? { |f| !f.locked? } %>
       <%= submit_tag "Save predictions" %>

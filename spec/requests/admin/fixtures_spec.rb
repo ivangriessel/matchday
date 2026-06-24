@@ -75,6 +75,22 @@ RSpec.describe "Admin::Fixtures", type: :request do
       }
       expect(fixture.reload.home_score).to eq(2)
     end
+
+    it "enqueues scoring job when scores change" do
+      fixture = create(:fixture)
+      expect {
+        patch admin_fixture_path(fixture), params: {
+          fixture: { home_score: 1, away_score: 0 }
+        }
+      }.to have_enqueued_job(ScorePredictionsJob).with(fixture.id)
+    end
+
+    it "does not enqueue scoring job for non-score updates" do
+      fixture = create(:fixture)
+      expect {
+        patch admin_fixture_path(fixture), params: { fixture: { matchweek: 5 } }
+      }.not_to have_enqueued_job(ScorePredictionsJob)
+    end
   end
 
   describe "DELETE /admin/fixtures/:id" do

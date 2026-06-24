@@ -7,5 +7,6 @@ class FixturesController < ApplicationController
                         .pick(:matchweek)
     @fixtures = @matchweek ? Fixture.for_matchweek(@matchweek).includes(:home_team, :away_team) : []
     @predictions = current_user.predictions.where(fixture: @fixtures).index_by(&:fixture_id)
+    @matchweek_points = @predictions.values.sum { |p| p.points || 0 }
   end
 end

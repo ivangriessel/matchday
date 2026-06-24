@@ -27,6 +27,7 @@ class Admin::FixturesController < Admin::BaseController
 
   def update
     if @fixture.update(fixture_params)
+      ScorePredictionsJob.perform_later(@fixture.id) if scores_changed?
       redirect_to admin_fixtures_path, notice: "Fixture updated."
     else
       @teams = Team.order(:name)
@@ -54,5 +55,9 @@ class Admin::FixturesController < Admin::BaseController
 
   def current_season
     "2025-26"
+  end
+
+  def scores_changed?
+    @fixture.previous_changes.key?("home_score") || @fixture.previous_changes.key?("away_score")
   end
 end
